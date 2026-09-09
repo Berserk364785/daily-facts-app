@@ -6,48 +6,20 @@ workflows:
       flutter: stable
       java: 17
     scripts:
-      - name: Дозаполнить платформенные файлы (ios/, полный android/)
+      - name: Дозаполнить платформенные файлы
         script: |
           if [ ! -f android/settings.gradle ]; then
             flutter create --org com.example --project-name daily_facts_app .
           fi
       - name: Применить дополнения к AndroidManifest.xml
         script: |
-          MANIFEST=android/app/src/main/AndroidManifest.xml
-          if ! grep -q "POST_NOTIFICATIONS" "$MANIFEST"; then
-            python3 - <<'EOF'
-import re
-manifest_path = "android/app/src/main/AndroidManifest.xml"
-with open(manifest_path, "r", encoding="utf-8") as f:
-    content = f.read()
-
-permissions = """    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.INTERNET" />
-"""
-content = content.replace("<application", permissions + "\n    <application", 1)
-
-receiver = """        <receiver android:name=".FactWidgetProvider" android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/fact_widget_info" />
-        </receiver>
-"""
-content = content.replace("</application>", receiver + "    </application>", 1)
-
-with open(manifest_path, "w", encoding="utf-8") as f:
-    f.write(content)
-print("Manifest patched.")
-EOF
-          fi
+          python3 scripts/patch_manifest.py
       - name: flutter pub get
-        script: flutter pub get
+        script: |
+          flutter pub get
       - name: Собрать release APK
-        script: flutter build apk --release
+        script: |
+          flutter build apk --release
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
     publishing:
