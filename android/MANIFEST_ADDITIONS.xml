@@ -1,0 +1,20 @@
+<!--
+  Этот файл НЕ используется напрямую сборкой. Он показывает, что нужно
+  добавить в android/app/src/main/AndroidManifest.xml после `flutter create`.
+  -->
+
+<!-- 1) Разрешения — добавить внутри <manifest> ... </manifest>, до <application> -->
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+<uses-permission android:name="android.permission.INTERNET" />
+
+<!-- 2) Регистрация виджета — добавить внутри <application> ... </application> -->
+<receiver android:name=".FactWidgetProvider" android:exported="false">
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    </intent-filter>
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/fact_widget_info" />
+</receiver>

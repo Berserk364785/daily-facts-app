@@ -1,0 +1,42 @@
+name: daily_facts_app
+description: "Каждое утро — исторический факт дня"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Сеть
+  http: ^1.2.2
+
+  # Локальные push-уведомления + часовые пояса
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
+
+  # Фоновые задачи (обновление факта ночью/утром)
+  workmanager: ^0.5.2
+
+  # Синхронизация данных с нативным домашним виджетом (Android/iOS)
+  home_widget: ^0.7.0
+
+  # Локальное хранилище последнего факта (кэш офлайн)
+  shared_preferences: ^2.3.3
+
+  # Красивые шрифты
+  google_fonts: ^6.2.1
+
+  # Анимации
+  flutter_animate: ^4.5.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
